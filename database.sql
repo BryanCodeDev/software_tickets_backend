@@ -172,7 +172,14 @@ INSERT INTO Users (username, name, email, phone, department, password, roleId, i
 ('empleado4', 'Sofia Ramírez', 'sofia.ramirez@duvyclass.com', '+57 307 890 1234', 'Logística', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 3, TRUE),
 ('empleado5', 'Miguel Torres', 'miguel.torres@duvyclass.com', '+57 308 901 2345', 'Producción', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 3, TRUE),
 ('empleado6', 'Elena Vargas', 'elena.vargas@duvyclass.com', '+57 309 012 3456', 'Calidad', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 3, TRUE),
-('empleado7', 'Diego Morales', 'diego.morales@duvyclass.com', '+57 310 123 4567', 'Compras', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 3, TRUE);
+('empleado7', 'Diego Morales', 'diego.morales@duvyclass.com', '+57 310 123 4567', 'Compras', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 3, TRUE),
+('supervisor', 'Gabriela Ruiz', 'gabriela.ruiz@duvyclass.com', '+57 311 234 5678', 'Operaciones', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, TRUE),
+('gerente', 'Fernando Castro', 'fernando.castro@duvyclass.com', '+57 312 345 6789', 'Dirección', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, TRUE),
+('auditor', 'Héctor Morales', 'hector.morales@duvyclass.com', '+57 313 456 7890', 'Auditoría', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 2, TRUE),
+('consultor', 'Isabel Torres', 'isabel.torres@duvyclass.com', '+57 314 567 8901', 'Consultoría', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 3, TRUE),
+('soporte', 'Javier Ruiz', 'javier.ruiz@duvyclass.com', '+57 315 678 9012', 'Soporte', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 2, TRUE),
+('desarrollador', 'Karla Mendoza', 'karla.mendoza@duvyclass.com', '+57 316 789 0123', 'Desarrollo', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, TRUE),
+('analista', 'Luis García', 'luis.garcia@duvyclass.com', '+57 317 890 1234', 'Análisis', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 2, TRUE);
 
 -- Insert sample inventory data (10 examples)
 INSERT INTO Inventories (propiedad, it, area, responsable, serial, capacidad, ram, marca, status, location, warrantyExpiry, assignedTo) VALUES
@@ -200,9 +207,18 @@ INSERT INTO Tickets (title, description, category, priority, status, userId, ass
 ('Problema con scanner', 'El scanner multifunción no reconoce documentos. Necesita calibración.', 'Hardware', 'baja', 'abierto', 3, 2),
 ('Actualización de Windows', 'Actualizar sistema operativo Windows en 10 estaciones de trabajo.', 'Software', 'media', 'en progreso', 3, 2);
 
--- Insert sample documents data (1 example - Word document)
+-- Insert sample documents data (10 examples)
 INSERT INTO Documents (title, description, filePath, version, type, category, expiryDate, createdBy) VALUES
-('Manual de Procedimientos IT', 'Documento con todos los procedimientos de TI de la empresa', '/uploads/manuales/manual_it_v1.docx', 'v1.0', 'Word', 'Procedimientos', '2026-12-31', 1);
+('Manual de Procedimientos IT', 'Documento con todos los procedimientos de TI de la empresa', '/uploads/manuales/manual_it_v1.docx', 'v1.0', 'Word', 'Procedimientos', '2026-12-31', 1),
+('Política de Seguridad Informática', 'Políticas de seguridad y mejores prácticas', '/uploads/politicas/seguridad_v2.pdf', 'v2.0', 'PDF', 'Seguridad', '2027-06-30', 1),
+('Diagrama de Red Corporativa', 'Esquema completo de la infraestructura de red', '/uploads/diagramas/red_corporativa_v1.png', 'v1.0', 'Imagen', 'Infraestructura', '2026-12-31', 2),
+('Manual de Usuario Office 365', 'Guía de uso de Office 365 para empleados', '/uploads/manuales/office365_v1.pdf', 'v1.0', 'PDF', 'Software', '2027-03-15', 2),
+('Contrato de Mantenimiento Servidores', 'Contrato con proveedor de mantenimiento', '/uploads/contratos/mantenimiento_servidores.pdf', 'v1.0', 'PDF', 'Contratos', '2026-08-20', 1),
+('Lista de Inventario 2025', 'Inventario completo de equipos tecnológicos', '/uploads/inventarios/lista_2025.xlsx', 'v1.0', 'Excel', 'Inventario', '2025-12-31', 2),
+('Procedimiento de Backup', 'Procedimientos para respaldos de datos', '/uploads/procedimientos/backup_v1.docx', 'v1.0', 'Word', 'Procedimientos', '2026-10-15', 2),
+('Certificado SSL Empresa', 'Certificado SSL para sitio web corporativo', '/uploads/certificados/ssl_empresa.crt', 'v1.0', 'Certificado', 'Seguridad', '2026-05-10', 1),
+('Manual de Configuración VPN', 'Guía para configurar acceso VPN', '/uploads/manuales/vpn_config_v1.pdf', 'v1.0', 'PDF', 'Redes', '2027-01-20', 2),
+('Política de Uso Aceptable', 'Reglas de uso de recursos tecnológicos', '/uploads/politicas/uso_aceptable_v1.docx', 'v1.0', 'Word', 'Políticas', '2026-09-30', 1);
 
 -- Insert sample credentials data (10 examples)
 INSERT INTO Credentials (service, username, password, area, description, createdBy) VALUES
@@ -216,5 +232,57 @@ INSERT INTO Credentials (service, username, password, area, description, created
 ('Cuenta GitHub', 'duvyclass-it', 'G1tH@bT0k3n', 'Desarrollo', 'Cuenta organizacional de GitHub', 2),
 ('Base de Datos MySQL', 'root', 'MySQLR00t2025#', 'Base de Datos', 'Cuenta root de MySQL', 2),
 ('Cuenta Correo Corporativo', 'it@duvyclass.com', 'C0rr30C0rp2025', 'Comunicaciones', 'Cuenta de correo del departamento IT', 1);
+
+-- Insert sample comments data (10 examples)
+INSERT INTO Comments (content, ticketId, userId) VALUES
+('He revisado el problema con la impresora. Parece ser un problema de driver. Voy a reinstalar el software.', 1, 2),
+('El usuario reporta que la conexión a internet se restableció después de reiniciar el router.', 4, 2),
+('Se completó la instalación de Office 365 en las 5 laptops solicitadas. Todos los usuarios pueden acceder.', 5, 2),
+('El scanner ha sido calibrado y ya funciona correctamente. Se realizó limpieza de cabezales.', 9, 2),
+('Actualización de Windows completada en 8 de 10 estaciones. Las 2 restantes requieren reinicio manual.', 10, 2),
+('Se configuró la cuenta VPN para el empleado. Se envió el manual de conexión por email.', 8, 1),
+('Mantenimiento preventivo completado en servidores principales. Todos los servicios funcionando normalmente.', 8, 2),
+('El antivirus se actualizó correctamente en todas las estaciones del área de ventas.', 2, 2),
+('Se creó la nueva cuenta de usuario para el departamento de marketing con todos los permisos necesarios.', 3, 1),
+('Problema con Outlook resuelto. Se sincronizaron todos los emails pendientes.', 6, 2);
+
+-- Insert sample user settings data (10 examples)
+INSERT INTO UserSettings (userId, notifications, emailAlerts, darkMode, language) VALUES
+(1, TRUE, TRUE, FALSE, 'es'),
+(2, TRUE, TRUE, TRUE, 'es'),
+(3, TRUE, FALSE, FALSE, 'es'),
+(4, FALSE, TRUE, FALSE, 'es'),
+(5, TRUE, TRUE, FALSE, 'es'),
+(6, TRUE, FALSE, TRUE, 'es'),
+(7, FALSE, FALSE, FALSE, 'es'),
+(8, TRUE, TRUE, TRUE, 'es'),
+(9, TRUE, TRUE, FALSE, 'es'),
+(10, FALSE, TRUE, FALSE, 'es');
+
+-- Insert sample ticket attachments data (10 examples)
+INSERT INTO TicketAttachments (filename, originalName, type, size, path, ticketId, uploadedBy) VALUES
+('captura_error_impresora.png', 'error_printer.png', 'image/png', 245760, '/uploads/tickets/1/captura_error_impresora.png', 1, 3),
+('log_conexion_internet.txt', 'internet_log.txt', 'text/plain', 15360, '/uploads/tickets/4/log_conexion_internet.txt', 4, 3),
+('manual_office365.pdf', 'office_manual.pdf', 'application/pdf', 2097152, '/uploads/tickets/5/manual_office365.pdf', 5, 2),
+('configuracion_scanner.pdf', 'scanner_config.pdf', 'application/pdf', 1048576, '/uploads/tickets/9/configuracion_scanner.pdf', 9, 2),
+('reporte_actualizacion_windows.docx', 'windows_update_report.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 524288, '/uploads/tickets/10/reporte_actualizacion_windows.docx', 10, 2),
+('manual_vpn_config.pdf', 'vpn_manual.pdf', 'application/pdf', 1572864, '/uploads/tickets/8/manual_vpn_config.pdf', 8, 1),
+('reporte_mantenimiento_servidores.pdf', 'maintenance_report.pdf', 'application/pdf', 3145728, '/uploads/tickets/8/reporte_mantenimiento_servidores.pdf', 8, 2),
+('log_actualizacion_antivirus.txt', 'antivirus_update_log.txt', 'text/plain', 32768, '/uploads/tickets/2/log_actualizacion_antivirus.txt', 2, 2),
+('credenciales_nuevo_usuario.pdf', 'new_user_credentials.pdf', 'application/pdf', 131072, '/uploads/tickets/3/credenciales_nuevo_usuario.pdf', 3, 1),
+('backup_correo_outlook.pst', 'outlook_backup.pst', 'application/vnd.ms-outlook', 10485760, '/uploads/tickets/6/backup_correo_outlook.pst', 6, 2);
+
+-- Insert sample histories data (10 examples)
+INSERT INTO Histories (action, tableName, recordId, oldValues, newValues, userId) VALUES
+('CREATE', 'Tickets', 1, NULL, '{"title":"Problema con impresora HP LaserJet","status":"abierto"}', 3),
+('UPDATE', 'Tickets', 4, '{"status":"abierto"}', '{"status":"en progreso"}', 2),
+('UPDATE', 'Tickets', 5, '{"status":"abierto"}', '{"status":"resuelto"}', 2),
+('CREATE', 'Inventories', 1, NULL, '{"propiedad":"PROPIO","status":"disponible"}', 3),
+('UPDATE', 'Inventories', 2, '{"status":"disponible"}', '{"status":"en uso"}', 3),
+('CREATE', 'Credentials', 1, NULL, '{"service":"Office 365 Admin"}', 1),
+('UPDATE', 'Users', 3, '{"department":"Ventas"}', '{"department":"Marketing"}', 1),
+('DELETE', 'Comments', 1, '{"content":"Comentario de prueba"}', NULL, 2),
+('UPDATE', 'Tickets', 6, '{"status":"abierto"}', '{"status":"cerrado"}', 2),
+('CREATE', 'Documents', 1, NULL, '{"title":"Manual de Procedimientos IT"}', 1);
 
 -- Note: The password hash above is for 'password'. In production, use bcrypt to hash passwords.

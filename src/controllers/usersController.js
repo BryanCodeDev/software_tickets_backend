@@ -16,8 +16,7 @@ const getProfile = async (req, res) => {
       id: user.id,
       name: user.name || user.username,
       email: user.email,
-      phone: user.phone,
-      department: user.department,
+      username: user.username,
       it: user.it,
       role: user.Role,
       isActive: user.isActive,
@@ -31,7 +30,7 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    const { name, email, phone, department } = req.body;
+    const { name, email, username, it } = req.body;
     const user = await User.findByPk(req.user.id);
     if (!user) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
@@ -45,11 +44,19 @@ const updateProfile = async (req, res) => {
       }
     }
 
+    // Check if username is already taken by another user
+    if (username && username !== user.username) {
+      const existingUser = await User.findOne({ where: { username } });
+      if (existingUser) {
+        return res.status(400).json({ error: 'El nombre de usuario ya está en uso' });
+      }
+    }
+
     await user.update({
       name: name || user.name,
       email: email || user.email,
-      phone: phone || user.phone,
-      department: department || user.department
+      username: username || user.username,
+      it: it !== undefined ? it : user.it
     });
 
     const updatedUser = await User.findByPk(req.user.id, { include: Role });
@@ -65,8 +72,7 @@ const updateProfile = async (req, res) => {
         id: updatedUser.id,
         name: updatedUser.name || updatedUser.username,
         email: updatedUser.email,
-        phone: updatedUser.phone,
-        department: updatedUser.department,
+        username: updatedUser.username,
         it: updatedUser.it,
         role: updatedUser.Role,
         isActive: updatedUser.isActive,
