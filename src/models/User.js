@@ -22,7 +22,6 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-<<<<<<< HEAD
   phone: {
     type: DataTypes.STRING,
   },
@@ -32,8 +31,6 @@ const User = sequelize.define('User', {
   it: {
     type: DataTypes.STRING,
   },
-=======
->>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
   roleId: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -42,13 +39,10 @@ const User = sequelize.define('User', {
       key: 'id',
     },
   },
-<<<<<<< HEAD
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
-=======
->>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
