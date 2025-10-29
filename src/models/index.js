@@ -4,6 +4,10 @@ const Role = require('./Role');
 const Ticket = require('./Ticket');
 const Inventory = require('./Inventory');
 const Document = require('./Document');
+<<<<<<< HEAD
+=======
+const Repository = require('./Repository');
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
 const Credential = require('./Credential');
 const Comment = require('./Comment');
 const Message = require('./Message');
@@ -41,6 +45,12 @@ User.hasMany(Inventory, { foreignKey: 'assignedTo' });
 Document.belongsTo(User, { foreignKey: 'createdBy' });
 User.hasMany(Document, { foreignKey: 'createdBy' });
 
+<<<<<<< HEAD
+=======
+Repository.belongsTo(User, { foreignKey: 'uploadedBy' });
+User.hasMany(Repository, { foreignKey: 'uploadedBy' });
+
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
 Credential.belongsTo(User, { foreignKey: 'createdBy', as: 'creator' });
 Credential.belongsTo(User, { foreignKey: 'updatedBy', as: 'updater' });
 User.hasMany(Credential, { foreignKey: 'createdBy' });
@@ -59,6 +69,10 @@ module.exports = {
   Ticket,
   Inventory,
   Document,
+<<<<<<< HEAD
+=======
+  Repository,
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
   Credential,
   Comment,
   Message,

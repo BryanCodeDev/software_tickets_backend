@@ -466,6 +466,7 @@ const generateTicketsReport = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 const getTicketStats = async (req, res) => {
   try {
     const userRole = req.user.Role.name;
@@ -510,3 +511,6 @@ const getTicketStats = async (req, res) => {
 };
 
 module.exports = { getAllTickets, getTicketById, createTicket, updateTicket, deleteTicket, addComment, uploadAttachment, searchTickets, generateTicketsReport, getTicketStats };
+=======
+module.exports = { getAllTickets, getTicketById, createTicket, updateTicket, deleteTicket, addComment, uploadAttachment, searchTickets, generateTicketsReport };
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7

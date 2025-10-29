@@ -1,7 +1,10 @@
 const { Inventory, User, History } = require('../models');
+<<<<<<< HEAD
 const { exec } = require('child_process');
 const util = require('util');
 const execAsync = util.promisify(exec);
+=======
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
 
 const getAllInventory = async (req, res) => {
   try {
@@ -12,6 +15,7 @@ const getAllInventory = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 const getInventoryByUser = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -25,6 +29,8 @@ const getInventoryByUser = async (req, res) => {
   }
 };
 
+=======
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
 const getInventoryById = async (req, res) => {
   try {
     const item = await Inventory.findByPk(req.params.id, { include: User });
@@ -103,6 +109,7 @@ const deleteInventory = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 const detectHardware = async (req, res) => {
   try {
     let serial = '';
@@ -180,3 +187,6 @@ const detectHardware = async (req, res) => {
 };
 
 module.exports = { getAllInventory, getInventoryById, getInventoryByUser, createInventory, updateInventory, deleteInventory, detectHardware };
+=======
+module.exports = { getAllInventory, getInventoryById, createInventory, updateInventory, deleteInventory };
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7

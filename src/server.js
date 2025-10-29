@@ -9,6 +9,10 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const ticketRoutes = require('./routes/tickets');
 const inventoryRoutes = require('./routes/inventory');
+<<<<<<< HEAD
+=======
+const repositoryRoutes = require('./routes/repository');
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
 const documentRoutes = require('./routes/documents');
 const credentialRoutes = require('./routes/credentials');
 const messageRoutes = require('./routes/messages');
@@ -40,6 +44,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/inventory', inventoryRoutes);
+<<<<<<< HEAD
+=======
+app.use('/api/repository', repositoryRoutes);
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
 app.use('/api/documents', documentRoutes);
 app.use('/api/credentials', credentialRoutes);
 app.use('/api/messages', messageRoutes);

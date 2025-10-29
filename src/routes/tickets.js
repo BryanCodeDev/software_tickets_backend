@@ -1,7 +1,11 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+<<<<<<< HEAD
 const { getAllTickets, getTicketById, createTicket, updateTicket, deleteTicket, addComment, uploadAttachment, getTicketStats } = require('../controllers/ticketController');
+=======
+const { getAllTickets, getTicketById, createTicket, updateTicket, deleteTicket, addComment, uploadAttachment } = require('../controllers/ticketController');
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
 const { authenticate, authorize } = require('../middlewares/auth');
 
 const router = express.Router();
@@ -37,7 +41,10 @@ const upload = multer({
 
 router.get('/', authenticate, getAllTickets);
 router.get('/:id', authenticate, getTicketById);
+<<<<<<< HEAD
 router.get('/stats/status', authenticate, getTicketStats);
+=======
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
 router.post('/', authenticate, createTicket);
 router.put('/:id', authenticate, updateTicket);
 router.delete('/:id', authenticate, deleteTicket);

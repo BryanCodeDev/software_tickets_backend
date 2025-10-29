@@ -22,7 +22,10 @@ CREATE TABLE Users (
   password VARCHAR(255) NOT NULL,
   phone VARCHAR(20),
   department VARCHAR(100),
+<<<<<<< HEAD
   it VARCHAR(50),
+=======
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
   roleId INT NOT NULL,
   isActive BOOLEAN DEFAULT TRUE,
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -82,6 +85,22 @@ CREATE TABLE Documents (
   FOREIGN KEY (createdBy) REFERENCES Users(id)
 );
 
+<<<<<<< HEAD
+=======
+-- Repository table
+CREATE TABLE Repositories (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  filePath VARCHAR(500) NOT NULL,
+  category VARCHAR(100),
+  tags VARCHAR(255),
+  uploadedBy INT NOT NULL,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (uploadedBy) REFERENCES Users(id)
+);
+
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
 -- Credentials table
 CREATE TABLE Credentials (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -204,6 +223,13 @@ INSERT INTO Tickets (title, description, category, priority, status, userId, ass
 INSERT INTO Documents (title, description, filePath, version, type, category, expiryDate, createdBy) VALUES
 ('Manual de Procedimientos IT', 'Documento con todos los procedimientos de TI de la empresa', '/uploads/manuales/manual_it_v1.docx', 'v1.0', 'Word', 'Procedimientos', '2026-12-31', 1);
 
+<<<<<<< HEAD
+=======
+-- Insert sample repository data (1 example - Word document)
+INSERT INTO Repositories (name, filePath, category, tags, uploadedBy) VALUES
+('Plantilla Contratos', '/uploads/templates/contrato_template.docx', 'Templates', 'contrato,plantilla,juridico', 1);
+
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
 -- Insert sample credentials data (10 examples)
 INSERT INTO Credentials (service, username, password, area, description, createdBy) VALUES
 ('Office 365 Admin', 'admin@duvyclass.com', 'P@ssw0rd2025!', 'Sistemas', 'Cuenta administrativa de Office 365', 1),

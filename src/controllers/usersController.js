@@ -6,23 +6,32 @@ const getProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
+<<<<<<< HEAD
     // Get assigned inventory
     const { Inventory } = require('../models');
     const assignedInventory = await Inventory.findAll({
       where: { assignedTo: req.user.id },
       attributes: ['id', 'it', 'propiedad', 'area', 'responsable', 'serial', 'capacidad', 'ram', 'marca', 'status', 'location']
     });
+=======
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
     res.json({
       id: user.id,
       name: user.name || user.username,
       email: user.email,
       phone: user.phone,
       department: user.department,
+<<<<<<< HEAD
       it: user.it,
       role: user.Role,
       isActive: user.isActive,
       createdAt: user.createdAt,
       assignedInventory
+=======
+      role: user.Role,
+      isActive: user.isActive,
+      createdAt: user.createdAt
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -53,12 +62,15 @@ const updateProfile = async (req, res) => {
     });
 
     const updatedUser = await User.findByPk(req.user.id, { include: Role });
+<<<<<<< HEAD
     // Get assigned inventory
     const { Inventory } = require('../models');
     const assignedInventory = await Inventory.findAll({
       where: { assignedTo: req.user.id },
       attributes: ['id', 'it', 'propiedad', 'area', 'responsable', 'serial', 'capacidad', 'ram', 'marca', 'status', 'location']
     });
+=======
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
     res.json({
       message: 'Perfil actualizado exitosamente',
       user: {
@@ -67,10 +79,15 @@ const updateProfile = async (req, res) => {
         email: updatedUser.email,
         phone: updatedUser.phone,
         department: updatedUser.department,
+<<<<<<< HEAD
         it: updatedUser.it,
         role: updatedUser.Role,
         isActive: updatedUser.isActive,
         assignedInventory
+=======
+        role: updatedUser.Role,
+        isActive: updatedUser.isActive
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
       }
     });
   } catch (err) {
@@ -136,15 +153,37 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
+<<<<<<< HEAD
     const { roleId, it } = req.body;
+=======
+    const { name, email, phone, department, roleId, isActive } = req.body;
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
     const user = await User.findByPk(id);
     if (!user) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
+<<<<<<< HEAD
     await user.update({
       roleId: roleId || user.roleId,
       it: it !== undefined ? it : user.it
+=======
+    // Check if email is already taken by another user
+    if (email && email !== user.email) {
+      const existingUser = await User.findOne({ where: { email } });
+      if (existingUser) {
+        return res.status(400).json({ error: 'El correo electrónico ya está en uso' });
+      }
+    }
+
+    await user.update({
+      name: name || user.name,
+      email: email || user.email,
+      phone: phone || user.phone,
+      department: department || user.department,
+      roleId: roleId || user.roleId,
+      isActive: isActive !== undefined ? isActive : user.isActive
+>>>>>>> 0d08f98e399ef9eae05c14c5081ac83d0bde67e7
     });
 
     const updatedUser = await User.findByPk(id, { include: Role });
