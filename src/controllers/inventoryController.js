@@ -103,6 +103,23 @@ const deleteInventory = async (req, res) => {
   }
 };
 
+const getUniqueITs = async (req, res) => {
+  try {
+    const its = await Inventory.findAll({
+      attributes: ['it', 'area'],
+      raw: true
+    });
+    const uniqueITs = [...new Set(its.map(item => item.it).filter(it => it))];
+    const itsWithArea = uniqueITs.map(it => {
+      const item = its.find(i => i.it === it);
+      return { it, area: item.area };
+    });
+    res.json(itsWithArea);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 const detectHardware = async (req, res) => {
   try {
     let serial = '';
@@ -179,4 +196,4 @@ const detectHardware = async (req, res) => {
   }
 };
 
-module.exports = { getAllInventory, getInventoryById, getInventoryByUser, createInventory, updateInventory, deleteInventory, detectHardware };
+module.exports = { getAllInventory, getInventoryById, getInventoryByUser, createInventory, updateInventory, deleteInventory, detectHardware, getUniqueITs };

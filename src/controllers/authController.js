@@ -4,17 +4,17 @@ const { User, Role } = require('../models');
 
 const register = async (req, res) => {
   try {
-    const { username, email, password, roleId = 3 } = req.body; // Default to 'Empleado' role
+    const { username, name, email, password, roleId = 3, it } = req.body; // Default to 'Empleado' role
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ error: 'El usuario ya existe' });
     }
-    const user = await User.create({ username, email, password, roleId });
+    const user = await User.create({ username, name, email, password, roleId, it });
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.status(201).json({
       message: 'Usuario registrado exitosamente',
       token,
-      user: { id: user.id, username: user.username, email: user.email, role: user.Role, name: user.name }
+      user: { id: user.id, username: user.username, email: user.email, role: user.Role, name: user.name, it: user.it }
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
