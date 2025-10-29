@@ -13,7 +13,6 @@ const repositoryRoutes = require('./routes/repository');
 const documentRoutes = require('./routes/documents');
 const credentialRoutes = require('./routes/credentials');
 const messageRoutes = require('./routes/messages');
-const repositoryRoutes = require('./routes/repository');
 const { initSocket } = require('./socket');
 
 dotenv.config();
@@ -42,7 +41,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/inventory', inventoryRoutes);
-app.use('/api/repository', repositoryRoutes);
 app.use('/api/repository', repositoryRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/credentials', credentialRoutes);
