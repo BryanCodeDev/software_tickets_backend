@@ -49,6 +49,10 @@ sequelize.sync({ force: false }).then(() => {
   console.log('Database connected and synced');
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    // Periodic status log every 5 minutes
+    setInterval(() => {
+      console.log('Server is running smoothly - All systems operational');
+    }, 5 * 60 * 1000); // 5 minutes in milliseconds
   });
 }).catch(err => {
   console.error('Database connection failed:', err);

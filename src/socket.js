@@ -23,6 +23,12 @@ const initSocket = (serverIo) => {
     socket.on('disconnect', () => {
       console.log('Usuario desconectado:', socket.id);
     });
+
+    // Log connection count periodically
+    setInterval(() => {
+      const connectedSockets = io.sockets.sockets.size;
+      console.log(`Active connections: ${connectedSockets}`);
+    }, 10 * 60 * 1000); // 10 minutes
   });
 };
 
