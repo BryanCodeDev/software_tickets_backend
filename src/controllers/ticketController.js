@@ -75,6 +75,12 @@ const getTicketById = async (req, res) => {
     if (!ticket) {
       return res.status(404).json({ error: 'Ticket not found' });
     }
+
+    // Debug logging
+    console.log('Ticket found:', ticket.id);
+    console.log('Ticket attachments:', ticket.TicketAttachments);
+    console.log('Attachments count:', ticket.TicketAttachments ? ticket.TicketAttachments.length : 0);
+
     res.json(ticket);
   } catch (err) {
     console.error('Error in getTicketById:', err);
