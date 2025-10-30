@@ -3,14 +3,18 @@ const bcrypt = require('bcryptjs');
 const { User, Role } = require('../models');
 
 const register = async (req, res) => {
+  console.log('Register request received:', { username: req.body.username, email: req.body.email, roleId: req.body.roleId || 3 });
   try {
     const { username, name, email, password, roleId = 3, it } = req.body; // Default to 'Empleado' role
+    console.log('Using roleId:', roleId);
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ error: 'El usuario ya existe' });
     }
     const user = await User.create({ username, name, email, password, roleId, it });
+    console.log('User created with roleId:', user.roleId);
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    console.log('Registration successful, sending response');
     res.status(201).json({
       message: 'Usuario registrado exitosamente',
       token,

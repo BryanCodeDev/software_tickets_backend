@@ -177,7 +177,6 @@ const deleteUser = async (req, res) => {
       require('../models').Comment.count({ where: { userId: id } }),
       require('../models').Message.count({ where: { userId: id } }),
       require('../models').Document.count({ where: { createdBy: id } }),
-      require('../models').Repository.count({ where: { uploadedBy: id } }),
       require('../models').History.count({ where: { userId: id } }),
       require('../models').TicketAttachment.count({ where: { uploadedBy: id } })
     ]);
