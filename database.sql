@@ -196,15 +196,15 @@ INSERT INTO Inventories (propiedad, it, area, responsable, serial, capacidad, ra
 
 -- Insert sample tickets data (10 examples)
 INSERT INTO Tickets (title, description, category, priority, status, userId, assignedTo) VALUES
-('Problema con impresora HP LaserJet', 'La impresora no responde y muestra error de conexión. Está ubicada en el área de contabilidad.', 'Hardware', 'media', 'abierto', 3, 2),
-('Actualización de software antivirus', 'Es necesario actualizar el antivirus en todas las estaciones de trabajo del área de ventas.', 'Software', 'alta', 'en progreso', 3, 2),
-('Configuración de nuevo usuario', 'Crear cuenta de usuario para el nuevo empleado del departamento de marketing.', 'Usuario', 'baja', 'resuelto', 3, 1),
-('Falla en conexión a internet', 'Varias estaciones no pueden acceder a internet. Problema en el router principal.', 'Red', 'alta', 'en progreso', 3, 2),
-('Instalación de Office 365', 'Instalar suite de Office 365 en 5 nuevas laptops del área de sistemas.', 'Software', 'media', 'abierto', 3, 2),
-('Problema con Outlook', 'El cliente de correo electrónico no sincroniza correctamente los emails.', 'Software', 'media', 'cerrado', 3, 2),
+('Problemas con SAMP', 'El sistema SAMP no responde correctamente en las estaciones de trabajo.', 'Software', 'media', 'abierto', 3, 2),
+('Problemas con impresoras', 'La impresora no responde y muestra error de conexión. Está ubicada en el área de contabilidad.', 'Hardware', 'media', 'abierto', 3, 2),
+('Problemas con contraseña', 'Usuario no puede acceder al sistema debido a problemas con la contraseña.', 'Usuario', 'alta', 'en progreso', 3, 2),
+('Problemas con Heinsohn', 'El sistema Heinsohn presenta errores de sincronización.', 'Software', 'alta', 'en progreso', 3, 2),
+('Problemas con Excel, Word, PDF', 'Los archivos de Office no se abren correctamente en algunas estaciones.', 'Software', 'media', 'abierto', 3, 2),
+('Problemas con acceso a carpetas', 'Usuarios no pueden acceder a carpetas compartidas en la red.', 'Red', 'media', 'cerrado', 3, 2),
+('Problemas con el navegador', 'El navegador web no carga páginas correctamente.', 'Software', 'baja', 'resuelto', 3, 1),
 ('Mantenimiento preventivo de servidores', 'Realizar mantenimiento preventivo en los servidores del data center.', 'Hardware', 'alta', 'en progreso', 2, 2),
 ('Configuración de VPN', 'Configurar acceso VPN para empleados que trabajan desde casa.', 'Red', 'media', 'resuelto', 3, 1),
-('Problema con scanner', 'El scanner multifunción no reconoce documentos. Necesita calibración.', 'Hardware', 'baja', 'abierto', 3, 2),
 ('Actualización de Windows', 'Actualizar sistema operativo Windows en 10 estaciones de trabajo.', 'Software', 'media', 'en progreso', 3, 2);
 
 -- Insert sample documents data (10 examples)

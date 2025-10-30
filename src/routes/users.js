@@ -13,8 +13,8 @@ router.put('/change-password', authenticate, changePassword);
 router.get('/settings', authenticate, getSettings);
 router.put('/settings', authenticate, updateSettings);
 
-// Admin routes (only for administrators)
-router.get('/', authenticate, authorize('Administrador'), getAllUsers);
+// Admin routes (only for administrators and technicians)
+router.get('/', authenticate, authorize('Administrador', 'Técnico'), getAllUsers);
 router.get('/:id', authenticate, authorize('Administrador'), getUserById);
 router.put('/:id', authenticate, authorize('Administrador'), updateUser);
 router.delete('/:id', authenticate, authorize('Administrador'), deleteUser);

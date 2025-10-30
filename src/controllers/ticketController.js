@@ -3,24 +3,8 @@ const { emitNewComment, emitTicketUpdate } = require('../socket');
 
 const getAllTickets = async (req, res) => {
   try {
-    const userRole = req.user.Role.name;
-    let whereClause = {};
-
-    // Filter tickets based on user role and permissions
-    if (userRole === 'Administrador') {
-      // Admin can see all tickets
-    } else if (userRole === 'Técnico') {
-      // Technicians can see tickets they created or are assigned to
-      whereClause = {
-        [require('sequelize').Op.or]: [
-          { userId: req.user.id },
-          { assignedTo: req.user.id }
-        ]
-      };
-    } else if (userRole === 'Empleado') {
-      // Employees can only see their own tickets
-      whereClause = { userId: req.user.id };
-    }
+    // All users can see all tickets regardless of role
+    const whereClause = {};
 
     const tickets = await Ticket.findAll({
       where: whereClause,
@@ -220,9 +204,14 @@ const deleteTicket = async (req, res) => {
       if (ticket.status !== 'cerrado') {
         return res.status(403).json({ error: 'Solo puedes eliminar tickets que estén cerrados' });
       }
-    } else {
-      // Employees cannot delete tickets
-      return res.status(403).json({ error: 'No tienes permisos para eliminar tickets' });
+    } else if (userRole === 'Empleado') {
+      // Employees can only delete their own tickets if closed
+      if (!isOwner) {
+        return res.status(403).json({ error: 'Solo puedes eliminar tus propios tickets' });
+      }
+      if (ticket.status !== 'cerrado') {
+        return res.status(403).json({ error: 'Solo puedes eliminar tickets que estén cerrados' });
+      }
     }
 
     // Delete related records and files
@@ -391,24 +380,11 @@ const searchTickets = async (req, res) => {
     if (userRole === 'Administrador') {
       whereClause = searchConditions;
     } else if (userRole === 'Técnico') {
-      whereClause = {
-        [require('sequelize').Op.and]: [
-          searchConditions,
-          {
-            [require('sequelize').Op.or]: [
-              { userId: req.user.id },
-              { assignedTo: req.user.id }
-            ]
-          }
-        ]
-      };
+      // Technicians can see all tickets for search
+      whereClause = searchConditions;
     } else if (userRole === 'Empleado') {
-      whereClause = {
-        [require('sequelize').Op.and]: [
-          searchConditions,
-          { userId: req.user.id }
-        ]
-      };
+      // Employees can search all tickets but results will be filtered on frontend
+      whereClause = searchConditions;
     }
 
     const tickets = await Ticket.findAll({
@@ -430,24 +406,8 @@ const searchTickets = async (req, res) => {
 
 const generateTicketsReport = async (req, res) => {
   try {
-    const userRole = req.user.Role.name;
-    let whereClause = {};
-
-    // Apply role-based filtering
-    if (userRole === 'Administrador') {
-      // Admin can see all tickets
-    } else if (userRole === 'Técnico') {
-      // Technicians can see tickets they created or are assigned to
-      whereClause = {
-        [require('sequelize').Op.or]: [
-          { userId: req.user.id },
-          { assignedTo: req.user.id }
-        ]
-      };
-    } else if (userRole === 'Empleado') {
-      // Employees can only see their own tickets
-      whereClause = { userId: req.user.id };
-    }
+    // All users can see all tickets for reports
+    const whereClause = {};
 
     const tickets = await Ticket.findAll({
       where: whereClause,
@@ -492,24 +452,8 @@ const generateTicketsReport = async (req, res) => {
 
 const getTicketStats = async (req, res) => {
   try {
-    const userRole = req.user.Role.name;
-    let whereClause = {};
-
-    // Apply role-based filtering
-    if (userRole === 'Administrador') {
-      // Admin can see all tickets
-    } else if (userRole === 'Técnico') {
-      // Technicians can see tickets they created or are assigned to
-      whereClause = {
-        [require('sequelize').Op.or]: [
-          { userId: req.user.id },
-          { assignedTo: req.user.id }
-        ]
-      };
-    } else if (userRole === 'Empleado') {
-      // Employees can only see their own tickets
-      whereClause = { userId: req.user.id };
-    }
+    // All users can see all ticket stats
+    const whereClause = {};
 
     const stats = await Ticket.findAll({
       where: whereClause,
