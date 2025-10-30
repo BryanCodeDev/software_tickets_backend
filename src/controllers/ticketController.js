@@ -167,6 +167,12 @@ const updateTicket = async (req, res) => {
     }
 
     const oldValues = ticket.toJSON();
+
+    // Handle empty string for assignedTo - convert to null
+    if (req.body.assignedTo === '') {
+      req.body.assignedTo = null;
+    }
+
     await ticket.update(req.body);
     await History.create({
       action: 'UPDATE',
@@ -181,6 +187,7 @@ const updateTicket = async (req, res) => {
 
     res.json(ticket);
   } catch (err) {
+    console.error('Error updating ticket:', err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -212,21 +219,30 @@ const deleteTicket = async (req, res) => {
       return res.status(403).json({ error: 'No tienes permisos para eliminar tickets' });
     }
 
-    // Check if ticket has related records that prevent deletion
-    const relatedRecords = await Promise.all([
-      Comment.count({ where: { ticketId: req.params.id } }),
-      Message.count({ where: { ticketId: req.params.id } }),
-      TicketAttachment.count({ where: { ticketId: req.params.id } })
-    ]);
+    // Delete related records and files
+    const fs = require('fs').promises;
+    const path = require('path');
 
-    const hasRelatedRecords = relatedRecords.some(count => count > 0);
+    // Delete comments
+    await Comment.destroy({ where: { ticketId: req.params.id } });
 
-    if (hasRelatedRecords) {
-      return res.status(400).json({
-        error: 'No se puede eliminar el ticket porque tiene comentarios, mensajes o archivos adjuntos relacionados.'
-      });
+    // Delete messages
+    await Message.destroy({ where: { ticketId: req.params.id } });
+
+    // Delete attachments and their files
+    const attachments = await TicketAttachment.findAll({ where: { ticketId: req.params.id } });
+    for (const attachment of attachments) {
+      try {
+        // Delete physical file
+        const filePath = path.join(__dirname, '../../uploads/tickets', path.basename(attachment.path));
+        await fs.unlink(filePath);
+      } catch (fileErr) {
+        console.warn('Could not delete file:', attachment.path, fileErr.message);
+      }
     }
+    await TicketAttachment.destroy({ where: { ticketId: req.params.id } });
 
+    // Create history record
     await History.create({
       action: 'DELETE',
       tableName: 'Tickets',
@@ -234,8 +250,10 @@ const deleteTicket = async (req, res) => {
       oldValues: ticket.toJSON(),
       userId: req.user.id
     });
+
+    // Delete the ticket
     await ticket.destroy();
-    res.json({ message: 'Ticket deleted' });
+    res.json({ message: 'Ticket deleted successfully' });
   } catch (err) {
     console.error('Error deleting ticket:', err);
     res.status(500).json({ error: err.message });
