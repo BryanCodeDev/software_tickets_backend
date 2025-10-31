@@ -29,13 +29,25 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password, twoFactorToken } = req.body;
+    console.log('Login attempt for:', email);
+
     const user = await User.findOne({ where: { email }, include: Role });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    console.log('User found:', !!user);
+
+    if (!user) {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    }
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    console.log('Password valid:', isValidPassword);
+
+    if (!isValidPassword) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
     // Check if 2FA is enabled
     if (user.twoFactorEnabled) {
+      console.log('2FA is enabled for user');
       if (!twoFactorToken) {
         return res.status(206).json({
           requires2FA: true,
@@ -51,14 +63,28 @@ const login = async (req, res) => {
         window: 2
       });
 
+      console.log('2FA token verified:', verified);
+
       if (!verified) {
         return res.status(401).json({ error: 'Código de autenticación de dos factores incorrecto' });
       }
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token, user: { id: user.id, username: user.username, email: user.email, role: user.Role, name: user.name } });
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '1h' });
+    console.log('Login successful, sending token');
+
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.Role,
+        name: user.name
+      }
+    });
   } catch (err) {
+    console.error('Login error:', err);
     res.status(500).json({ error: err.message });
   }
 };
