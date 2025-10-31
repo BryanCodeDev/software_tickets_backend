@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllUsers, getUserById, updateUser, deleteUser, getProfile, updateProfile, changePassword, getSettings, updateSettings, enable2FA, verify2FA, disable2FA, get2FAStatus } = require('../controllers/usersController');
+const { getAllUsers, getUserById, updateUser, deleteUser, getProfile, updateProfile, changePassword, getSettings, updateSettings, enable2FA, verify2FA, disable2FA, get2FAStatus, requestPasswordReset, resetPassword } = require('../controllers/usersController');
 const { authenticate, authorize } = require('../middlewares/auth');
 
 const router = express.Router();
@@ -18,6 +18,10 @@ router.post('/2fa/enable', authenticate, enable2FA);
 router.post('/2fa/verify', authenticate, verify2FA);
 router.post('/2fa/disable', authenticate, disable2FA);
 router.get('/2fa/status', authenticate, get2FAStatus);
+
+// Password Reset routes (public)
+router.post('/request-password-reset', requestPasswordReset);
+router.post('/reset-password', resetPassword);
 
 // Admin routes (only for administrators and technicians)
 router.get('/', authenticate, authorize('Administrador', 'Técnico'), getAllUsers);

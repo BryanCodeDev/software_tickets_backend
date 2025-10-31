@@ -1,6 +1,8 @@
 const { User, Role, UserSetting } = require('../models');
 const speakeasy = require('speakeasy');
 const qrcode = require('qrcode');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 
 const getProfile = async (req, res) => {
   try {
@@ -334,6 +336,114 @@ const get2FAStatus = async (req, res) => {
   }
 };
 
+const requestPasswordReset = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenHash = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    // Set expiration (1 hour from now)
+    const resetExpires = new Date(Date.now() + 60 * 60 * 1000);
+
+    await user.update({
+      resetPasswordToken: resetTokenHash,
+      resetPasswordExpires: resetExpires
+    });
+
+    // Send email (for now, just return the token - in production, send email)
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
+
+    // Create transporter (configure with your email service)
+    const transporter = nodemailer.createTransporter({
+      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+      port: process.env.EMAIL_PORT || 587,
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: user.email,
+      subject: 'Restablecimiento de Contraseña - DuvyClass',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #7c3aed;">Restablecimiento de Contraseña</h2>
+          <p>Hola ${user.name || user.username},</p>
+          <p>Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para continuar:</p>
+          <a href="${resetUrl}" style="background-color: #7c3aed; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 20px 0;">Restablecer Contraseña</a>
+          <p>Este enlace expirará en 1 hora.</p>
+          <p>Si no solicitaste este cambio, ignora este mensaje.</p>
+          <p>Saludos,<br>Equipo de DuvyClass</p>
+        </div>
+      `
+    };
+
+    try {
+      await transporter.sendMail(mailOptions);
+      res.json({ message: 'Se ha enviado un enlace de restablecimiento a tu correo electrónico' });
+    } catch (emailError) {
+      console.error('Error sending email:', emailError);
+      // For development, return the token directly
+      res.json({
+        message: 'Para desarrollo: usa este token para restablecer la contraseña',
+        resetToken: resetToken,
+        resetUrl: resetUrl
+      });
+    }
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    // Hash the token to compare with stored hash
+    const resetTokenHash = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await User.findOne({
+      where: {
+        resetPasswordToken: resetTokenHash,
+        resetPasswordExpires: {
+          [require('sequelize').Op.gt]: new Date()
+        }
+      }
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: 'Token inválido o expirado' });
+    }
+
+    // Hash new password
+    const bcrypt = require('bcryptjs');
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    // Update password and clear reset token
+    await user.update({
+      password: hashedPassword,
+      resetPasswordToken: null,
+      resetPasswordExpires: null
+    });
+
+    res.json({ message: 'Contraseña restablecida exitosamente' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = {
   getProfile,
   updateProfile,
@@ -347,5 +457,7 @@ module.exports = {
   enable2FA,
   verify2FA,
   disable2FA,
-  get2FAStatus
+  get2FAStatus,
+  requestPasswordReset,
+  resetPassword
 };
