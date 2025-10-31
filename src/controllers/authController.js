@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const speakeasy = require('speakeasy');
 const { User, Role } = require('../models');
 
 const register = async (req, res) => {
@@ -27,11 +28,34 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, twoFactorToken } = req.body;
     const user = await User.findOne({ where: { email }, include: Role });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
+
+    // Check if 2FA is enabled
+    if (user.twoFactorEnabled) {
+      if (!twoFactorToken) {
+        return res.status(206).json({
+          requires2FA: true,
+          message: 'Se requiere código de autenticación de dos factores'
+        });
+      }
+
+      // Verify 2FA token
+      const verified = speakeasy.totp.verify({
+        secret: user.twoFactorSecret,
+        encoding: 'base32',
+        token: twoFactorToken,
+        window: 2
+      });
+
+      if (!verified) {
+        return res.status(401).json({ error: 'Código de autenticación de dos factores incorrecto' });
+      }
+    }
+
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.json({ token, user: { id: user.id, username: user.username, email: user.email, role: user.Role, name: user.name } });
   } catch (err) {

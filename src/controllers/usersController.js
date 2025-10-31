@@ -1,4 +1,6 @@
 const { User, Role, UserSetting } = require('../models');
+const speakeasy = require('speakeasy');
+const qrcode = require('qrcode');
 
 const getProfile = async (req, res) => {
   try {
@@ -237,6 +239,101 @@ const updateSettings = async (req, res) => {
   }
 };
 
+const enable2FA = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    // Generate secret
+    const secret = speakeasy.generateSecret({
+      name: `DuvyClass (${user.email})`,
+      issuer: 'DuvyClass'
+    });
+
+    // Generate QR code
+    const qrCodeUrl = await qrcode.toDataURL(secret.otpauth_url);
+
+    // Store secret temporarily (not enabled yet)
+    await user.update({
+      twoFactorSecret: secret.base32
+    });
+
+    res.json({
+      secret: secret.base32,
+      qrCode: qrCodeUrl
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const verify2FA = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const user = await User.findByPk(req.user.id);
+
+    if (!user || !user.twoFactorSecret) {
+      return res.status(400).json({ error: 'Configuración 2FA no encontrada' });
+    }
+
+    // Verify token
+    const verified = speakeasy.totp.verify({
+      secret: user.twoFactorSecret,
+      encoding: 'base32',
+      token: token,
+      window: 2 // Allow 2 time windows (30 seconds each)
+    });
+
+    if (!verified) {
+      return res.status(400).json({ error: 'Código de verificación incorrecto' });
+    }
+
+    // Enable 2FA
+    await user.update({
+      twoFactorEnabled: true
+    });
+
+    res.json({ message: 'Autenticación de dos factores habilitada exitosamente' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const disable2FA = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    await user.update({
+      twoFactorEnabled: false,
+      twoFactorSecret: null
+    });
+
+    res.json({ message: 'Autenticación de dos factores deshabilitada exitosamente' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const get2FAStatus = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json({
+      enabled: user.twoFactorEnabled || false
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = {
   getProfile,
   updateProfile,
@@ -246,5 +343,9 @@ module.exports = {
   updateUser,
   deleteUser,
   getSettings,
-  updateSettings
+  updateSettings,
+  enable2FA,
+  verify2FA,
+  disable2FA,
+  get2FAStatus
 };

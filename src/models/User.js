@@ -46,6 +46,14 @@ const User = sequelize.define('User', {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
+  twoFactorSecret: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  twoFactorEnabled: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
